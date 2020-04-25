@@ -1,0 +1,28 @@
+#!/usr/bin/env NODE_OPTIONS=--no-warnings node
+
+import fs from "fs";
+import omelette from 'omelette';
+import { buildAutocompletionTree, unindent } from "./utils.js";
+import inject from "./inject/inject.js";
+import { commands } from "./commands.js";
+
+// generate autocompletion and intercept autocompletion requests
+omelette('easy_shell').tree(buildAutocompletionTree(substitutionTree)).init()
+
+// if this line is reached, we are not in autocompletion mode
+
+const args = process.argv.slice(2);
+let arg, node = substitutionTree;
+while (arg = args.shift()) {
+    node = node[arg];
+}
+if (node) {
+    if (node.description) {
+        console.log(unindent(node.description))
+    }
+    console.log("[Your shell input line has been prefilled with the requested command. You can modify it or press enter to execute it.]")
+    const command = node.getCommandString();
+    if (command) {
+        inject(command);
+    }
+}
