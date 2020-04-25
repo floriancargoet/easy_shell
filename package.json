@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^2.0.0",
+    "omelette": "^0.4.12",
+    "which": "^2.0.2"
+  }
+}
